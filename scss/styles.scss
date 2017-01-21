@@ -1,0 +1,13 @@
+@import "colors";
+
+@import "partials/search";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $bgBodyColor;
+}
