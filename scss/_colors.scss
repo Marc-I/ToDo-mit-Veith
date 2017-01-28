@@ -1,2 +1,21 @@
-$bgBodyColor: #ddd;
+//2C3E50 dunkelblau
+//E74C3C rot
+//ECF0F1 weiss
+//3498DB hellblau
+//2980B9 blau
+
+$bgBodyColor: #ECF0F1;
 $bgText: #fff;
+
+$SearchBgColor: #FFF;
+
+$EntryBgColor: #3498DB;
+$EntryTextColor: #FFF;
+
+$EntryBgColor_closed: #099A4D;
+$EntryTextColor_closed: #FFF;
+
+$EntryBgColor_deleted: #E74C3C;
+$EntryTextColor_deleted: #FFF;
+
+$InputBgColor_Focus: rgba(255, 255, 255, 0.5);

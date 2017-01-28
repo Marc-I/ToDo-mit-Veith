@@ -1,0 +1,56 @@
+@import "../colors";
+
+.detail {
+  input, textarea {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid transparent;
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid;
+      background-color: $InputBgColor_Focus;
+    }
+  }
+
+  div {
+    margin: 8px;
+  }
+
+  .date input {
+    max-width: 10rem;
+  }
+
+  .caption input {
+    font-size: 2rem;
+  }
+
+  .description textarea {
+    min-height: 8em;
+  }
+
+  .tagarea .badge {
+    margin: 4px 2px;
+    padding: 4px 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    color: #fff;
+  }
+
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  div {
+    display: block;
+    text-align: center;
+    font-size: 48px;
+    & > span, & > a {
+      margin: 4px;
+    }
+  }
+}

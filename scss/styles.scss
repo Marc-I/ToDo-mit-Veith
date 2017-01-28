@@ -1,7 +1,5 @@
 @import "colors";
 
-@import "partials/search";
-
 * {
   box-sizing: border-box;
 }
@@ -10,4 +8,14 @@ body {
   margin: 0;
   padding: 0;
   background-color: $bgBodyColor;
+  font-family: "Roboto", Arial, sans-serif;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@import "partials/search";
+@import "partials/entries";
+@import "partials/detail";

@@ -1,14 +1,34 @@
 @import "../colors";
 
 #search {
-  display: block;
-  width: 100%;
-  height: 48px;
-  padding: 8px;
-  border: none;
-  font-size: 2em;
+  position: relative;
+  background-color: $SearchBgColor;
+  margin-bottom: 2em;
 
-  &:focus{
-    outline: none;
+  input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 8px;
+    background-color: transparent;
+    border: none;
+    font-size: 2em;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &:before {
+    content: "\f002";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.5em;
+
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
   }
 }

@@ -1,0 +1,20 @@
+{
+  "name": "ToDoApp",
+  "description": "",
+  "main": "js/script.js",
+  "authors": [
+    "Marc Iten <git@marc-iten.ch>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Marc-I/ToDo-mit-Veith-",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+  }
+}
