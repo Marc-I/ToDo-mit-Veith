@@ -82,15 +82,17 @@ $(document).on('click', '.deleted .entry', function () {
 
 $(document).on('touchstart', '.entry', handleTouchStart);
 $(document).on('touchmove', '.entry', function (evt) {
+    var $currentElement = $(this);
+    var $currentListID = $(this).attr('data-listid');
     switch (handleTouchMove(evt)) {
         case 'left':
-            $('main .closed').prepend($(this));
-            var $listItem = GetListItemByID($(this).attr('data-listid'));
+            $('main .closed').prepend($currentElement);
+            var $listItem = GetListItemByID($currentListID);
             $listItem.Status = 'closed';
             SaveList();
             break;
         case 'down':
-            window.location.href = 'detail.html';
+            window.location.href = 'detail.html?id=' + $currentListID;
             break;
     }
 });
@@ -120,21 +122,17 @@ function handleTouchMove(evt) {
     if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
         if (xDiff > 0) {
             /* left swipe */
-            console.log('left swipe');
             return 'left';
         } else {
             /* right swipe */
-            console.log('right swipe');
             return 'right';
         }
     } else {
         if (yDiff > 0) {
             /* up swipe */
-            console.log('up swipe');
             return 'up';
         } else {
             /* down swipe */
-            console.log('down swipe');
             return 'down';
         }
     }

@@ -25,14 +25,14 @@ main .open, main .closed, main .deleted {
     color: $EntryTextColor_deleted;
   }
   h2 {
-    margin: 4px 4px;
+    margin: 4px 16px;
     padding: 0;
     font-weight: lighter;
   }
   nav {
     position: relative;
     display: block;
-    width: 100%;
+    margin: 4px 16px 0;
     height: 20px;
 
     span{
