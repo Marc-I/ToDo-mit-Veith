@@ -1,17 +1,30 @@
 @import "../colors";
 
+main > h2 {
+  text-align: center;
+  font-weight: lighter;
+  &:before, &:after {
+    content: "";
+    border-top: 1px solid #ddd;
+  }
+}
+
 main .open, main .closed, main .deleted {
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 100%;
+  overflow: hidden;
   li{
     list-style: none;
   }
 }
 
 .entry {
+  position: relative;
   margin: 1px;
   padding: 4px;
+  transition: transform 0.2s ease;
   .open & {
     background-color: $EntryBgColor;
     color: $EntryTextColor;
@@ -24,6 +37,46 @@ main .open, main .closed, main .deleted {
     background-color: $EntryBgColor_deleted;
     color: $EntryTextColor_deleted;
   }
+
+  &.edit {
+    transform: translateX(100px);
+    position: relative;
+  }
+  &.trash {
+    transform: translateX(-100px);
+    position: relative;
+  }
+  .edit-button, .trash-button {
+    position: absolute;
+    top: 0;
+    width: 99px;
+    height: 100%;
+    text-align: center;
+    font-size: 32px;
+  }
+  .edit-button {
+    right: calc(100% + 1px);
+    background-color: $EntryBgColor_closed;
+    &:after {
+      position: absolute;
+      content: "\f040";
+      top: 50%;
+      left: 50%;
+      margin: -16px;
+    }
+  }
+  .trash-button {
+    left: calc(100% + 1px);
+    background-color: $EntryBgColor_deleted;
+    &:after {
+      position: absolute;
+      content: "\f014";
+      top: 50%;
+      left: 50%;
+      margin: -16px;
+    }
+  }
+
   h2 {
     margin: 4px 16px;
     padding: 0;

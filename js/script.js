@@ -2,6 +2,8 @@
  * Created by marc-iten on 28.01.17.
  */
 
+var enTaskStatus = {open: 0, closed: 1, deleted: 2};
+
 var $MyToDoList;
 $(document).ready(function () {
     LoadList();
@@ -13,10 +15,11 @@ $(document).ready(function () {
 function AddItem($ToDoItem) {
     var $listItem = $('<li class="entry"></li>');
     $listItem.attr('data-listid', $ToDoItem.ID);
-    var $navItem = $('<nav><span class="fa fa-clock-o"></span><span class="fa fa-tags"></span></nav>');
     var $titleItem = $('<h2></h2>');
     $titleItem.text($ToDoItem.Title);
-    $listItem.append($navItem).append($titleItem);
+    $listItem
+        .append('<nav><span class="fa fa-clock-o"></span><span class="fa fa-tags"></span></nav>')
+        .append($titleItem);
 
     $('main .' + $ToDoItem.Status).prepend($listItem);
 }
@@ -38,6 +41,7 @@ function SaveList() {
 }
 
 $(document).on('keydown', '#search input', function (event) {
+    RemoveAllTrashAndEditClasses();
     if (event.keyCode == 13) {
         var newItem = {Status: 'open', Title: $(this).val(), ID: GetNextID()};
         AddItem(newItem);
@@ -64,35 +68,83 @@ function GetListItemByID($ListID) {
     })[0];
 }
 
-$(document).on('click', '.closed .entry', function () {
-    $('main .deleted').prepend($(this));
+function RemoveAllTrashAndEditClasses() {
+    $('.trash').removeClass('trash');
+    $('.edit').removeClass('edit');
+}
 
-    var $listItem = GetListItemByID($(this).attr('data-listid'));
+$(document).on('click', '.trash-button', function (event) {
+    event.stopPropagation();
+    $('main .deleted').prepend($(this).parent());
+    RemoveAllTrashAndEditClasses();
+
+    var $listItem = GetListItemByID($(this).parent().attr('data-listid'));
     $listItem.Status = 'deleted';
     SaveList();
 });
 
-$(document).on('click', '.deleted .entry', function () {
+$(document).on('click', '.edit-button', function (event) {
+    event.stopPropagation();
+    var $currentListID = $(this).parent().attr('data-listid');
+    window.location.href = 'detail.html?id=' + $currentListID;
+});
+
+$(document).on('click', '.open .entry', function () {
     $('main .closed').prepend($(this));
+    RemoveAllTrashAndEditClasses();
 
     var $listItem = GetListItemByID($(this).attr('data-listid'));
     $listItem.Status = 'closed';
     SaveList();
 });
 
-$(document).on('touchstart', '.entry', handleTouchStart);
+/*$(document).on('click', '.closed .entry', function () {
+ $('main .deleted').prepend($(this));
+
+ var $listItem = GetListItemByID($(this).attr('data-listid'));
+ $listItem.Status = 'deleted';
+ SaveList();
+ });*/
+
+/*$(document).on('click', '.deleted .entry', function () {
+ $('main .closed').prepend($(this));
+
+ var $listItem = GetListItemByID($(this).attr('data-listid'));
+ $listItem.Status = 'closed';
+ SaveList();
+ });*/
+
+$(document).on('touchstart', '.entry', function(event){
+    if ($(this).find('.edit-button').length == 0)
+        $(this).append('<span class="edit-button fa"></span><span class="trash-button fa"></span>');
+    handleTouchStart(event);
+});
+/*$(document).on('touchend', '.entry', function (evt) {
+ console.log(evt);
+ });*/
 $(document).on('touchmove', '.entry', function (evt) {
+    RemoveAllTrashAndEditClasses();
     var $currentElement = $(this);
     var $currentListID = $(this).attr('data-listid');
     switch (handleTouchMove(evt)) {
         case 'left':
-            $('main .closed').prepend($currentElement);
-            var $listItem = GetListItemByID($currentListID);
-            $listItem.Status = 'closed';
-            SaveList();
+            $(this).addClass('trash');
+            /*            $('main .closed').prepend($currentElement);
+             var $listItem = GetListItemByID($currentListID);
+             $listItem.Status = 'closed';
+             SaveList();
+             */
+            break;
+        case 'right':
+            $(this).addClass('edit');
+            /*            $('main .open').prepend($currentElement);
+             var $listItem = GetListItemByID($currentListID);
+             $listItem.Status = 'open';
+             SaveList();
+             */
             break;
         case 'down':
-            window.location.href = 'detail.html?id=' + $currentListID;
+            //window.location.href = 'detail.html?id=' + $currentListID;
             break;
     }
 });
@@ -119,11 +171,14 @@ function handleTouchMove(evt) {
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
 
+    //console.log('x:', xDiff);
+    //console.log('y:', yDiff);
+
     if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
         if (xDiff > 0) {
             /* left swipe */
             return 'left';
-        } else {
+        } else if (xDiff < 0) {
             /* right swipe */
             return 'right';
         }
@@ -131,7 +186,7 @@ function handleTouchMove(evt) {
         if (yDiff > 0) {
             /* up swipe */
             return 'up';
-        } else {
+        } else if (yDiff < 0) {
             /* down swipe */
             return 'down';
         }
