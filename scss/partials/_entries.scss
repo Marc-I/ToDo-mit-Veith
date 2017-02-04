@@ -28,43 +28,51 @@ main .open, main .closed, main .deleted {
   .open & {
     background-color: $EntryBgColor;
     color: $EntryTextColor;
-    &.trash .undo-button {
+    .undo-button {
       display: none;
     }
   }
   .closed & {
     background-color: $EntryBgColor_closed;
     color: $EntryTextColor_closed;
-    &.trash .trash-button {
+    .check-button {
       display: none;
     }
   }
   .deleted & {
     background-color: $EntryBgColor_deleted;
     color: $EntryTextColor_deleted;
-    &.trash .trash-button {
+    &.rightButtons {
+      transform: translateX(-80px);
+    }
+    .check-button, .trash-button {
       display: none;
     }
   }
 
-  &.edit {
-    transform: translateX(100px);
+  &.leftButtons {
+    transform: translateX(80px);
     position: relative;
   }
-  &.trash {
-    transform: translateX(-100px);
+  &.rightButtons {
+    transform: translateX(-160px);
     position: relative;
   }
-  .edit-button, .trash-button, .undo-button {
+  .edit-button, .trash-button, .undo-button, .check-button {
     position: absolute;
     top: 0;
-    width: 99px;
+    width: 79px;
     height: 100%;
     text-align: center;
     font-size: 32px;
+
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
   }
   .edit-button {
-    right: calc(100% + 1px);
+    left: calc(100% + 1px);
     background-color: $EntryBgColor_closed;
     &:after {
       position: absolute;
@@ -75,7 +83,7 @@ main .open, main .closed, main .deleted {
     }
   }
   .trash-button {
-    left: calc(100% + 1px);
+    left: calc(100% + 81px);
     background-color: $EntryBgColor_deleted;
     &:after {
       position: absolute;
@@ -86,11 +94,22 @@ main .open, main .closed, main .deleted {
     }
   }
   .undo-button {
-    left: calc(100% + 1px);
+    right: calc(100% + 1px);
     background-color: $EntryBgColor;
     &:after {
       position: absolute;
       content: "\f0e2";
+      top: 50%;
+      left: 50%;
+      margin: -16px;
+    }
+  }
+  .check-button {
+    right: calc(100% + 1px);
+    background-color: $EntryBgColor_closed;
+    &:after {
+      position: absolute;
+      content: "\f00c";
       top: 50%;
       left: 50%;
       margin: -16px;

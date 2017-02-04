@@ -2,46 +2,84 @@
  * Created by marc-iten on 28.01.17.
  */
 
-var enTaskStatus = {open: 0, closed: 1, deleted: 2};
-
+// Variable, die alle Tasks enthält
 var $MyToDoList;
+
+// wird ausgeführt, wenn die Seite komplett geladen ist
 $(document).ready(function () {
+
+    // lädt als erstes alle Tasks
     LoadList();
+
+    // alle Tasks werden dem DOM hinzugefügt
     for (var i = 0; i < $MyToDoList.length; i++) {
         AddItem($MyToDoList[i]);
     }
 });
 
+// ein einzelner Task dem DOM hinzufügen
 function AddItem($ToDoItem) {
+
+    // ein Listenpunkt erstellen
     var $listItem = $('<li class="entry"></li>');
+
+    // dem Listenpunkt das Attribut "data-listid" hinzufügen
     $listItem.attr('data-listid', $ToDoItem.ID);
+
+    // ein Tasktitel-Element erstellen
     var $titleItem = $('<h2></h2>');
+
+    // dem Tasktitel-Element den Titeltext hinzufügen
     $titleItem.text($ToDoItem.Title);
+
+    // dem Listenpunk die Navigationspunke (Uhr und Tags), sowie das Titel-Element hinzufügen
     $listItem
         .append('<nav><span class="fa fa-clock-o"></span><span class="fa fa-tags"></span></nav>')
         .append($titleItem);
 
+    // der richtigen Liste den Listenpunkt hinzufügen
     $('main .' + $ToDoItem.Status).prepend($listItem);
 }
 
+// Funktion, die alle Tasks aus dem LocalStorage lädt
 function LoadList() {
+
+    // prüft, ob der Storage aufgerufen werden kann
     if (typeof (Storage) !== undefined) {
-        var $tmp = localStorage.getItem('MyToDoList');
-        if ($tmp != null) {
-            $MyToDoList = JSON.parse($tmp);
+
+        // lädt alle Tasks aus dem LocalStorage in die $result-Variable
+        var $result = localStorage.getItem('MyToDoList');
+
+        // prüft ein $result besteht
+        if ($result != null) {
+
+            // parst das $result aus einem String in Tasks und weist diese der Liste zu
+            $MyToDoList = JSON.parse($result);
+
+            // bricht die Funktion vorzeitig ab
             return;
         }
     }
+
+    // falls die Funktion nicht vorzeitig abgebrochen wurde, wir ein leerer Array der Liste zugewiesen
     $MyToDoList = [];
 }
 
+// Funktion, die alle Tasks im LocalStorage speichert
 function SaveList() {
+
+    // prüft, ob der Storage aufgerufen werden kann
     if (typeof (Storage) !== undefined)
+
+    // fügt dem LocalStorage die Liste als String hinzu
         localStorage.setItem('MyToDoList', JSON.stringify($MyToDoList));
 }
 
+// wird ausgeführt, wenn im Suchfeld eine Taste gedrückt wird
 $(document).on('keydown', '#search input', function (event) {
-    RemoveAllTrashAndEditClasses();
+
+    // schliesst alle offenen Optionen der Tasks
+    RemoveAllLeftAndRightClasses();
     if (event.keyCode == 13) {
         var newItem = {Status: 'open', Title: $(this).val(), ID: GetNextID()};
         AddItem(newItem);
@@ -68,15 +106,38 @@ function GetListItemByID($ListID) {
     })[0];
 }
 
-function RemoveAllTrashAndEditClasses() {
-    $('.trash').removeClass('trash');
-    $('.edit').removeClass('edit');
+function RemoveAllLeftAndRightClasses() {
+    $('.rightButtons').removeClass('rightButtons');
+    $('.leftButtons').removeClass('leftButtons');
+}
+
+function CloseToDo(ListID) {
+    var $element = $('.entry[data-listid="' + ListID + '"]');
+    $('main .closed').prepend($element);
+    // schliesst alle offenen Optionen der Tasks
+    RemoveAllLeftAndRightClasses();
+
+    var $listItem = GetListItemByID(ListID);
+    $listItem.Status = 'closed';
+    SaveList();
+}
+
+function UndoToDo(ListID) {
+    var $element = $('.entry[data-listid="' + ListID + '"]');
+    $('main .open').prepend($element);
+    // schliesst alle offenen Optionen der Tasks
+    RemoveAllLeftAndRightClasses();
+
+    var $listItem = GetListItemByID(ListID);
+    $listItem.Status = 'open';
+    SaveList();
 }
 
 $(document).on('click', '.trash-button', function (event) {
     event.stopPropagation();
     $('main .deleted').prepend($(this).parent());
-    RemoveAllTrashAndEditClasses();
+    // schliesst alle offenen Optionen der Tasks
+    RemoveAllLeftAndRightClasses();
 
     var $listItem = GetListItemByID($(this).parent().attr('data-listid'));
     $listItem.Status = 'deleted';
@@ -85,12 +146,7 @@ $(document).on('click', '.trash-button', function (event) {
 
 $(document).on('click', '.undo-button', function (event) {
     event.stopPropagation();
-    $('main .open').prepend($(this).parent());
-    RemoveAllTrashAndEditClasses();
-
-    var $listItem = GetListItemByID($(this).parent().attr('data-listid'));
-    $listItem.Status = 'open';
-    SaveList();
+    UndoToDo($(this).parent().attr('data-listid'));
 });
 
 $(document).on('click', '.edit-button', function (event) {
@@ -99,59 +155,47 @@ $(document).on('click', '.edit-button', function (event) {
     window.location.href = 'detail.html?id=' + $currentListID;
 });
 
-$(document).on('click', '.open .entry', function () {
-    $('main .closed').prepend($(this));
-    RemoveAllTrashAndEditClasses();
-
-    var $listItem = GetListItemByID($(this).attr('data-listid'));
-    $listItem.Status = 'closed';
-    SaveList();
+$(document).on('click', '.check-button', function () {
+    event.stopPropagation();
+    CloseToDo($(this).parent().attr('data-listid'));
 });
 
-/*$(document).on('click', '.closed .entry', function () {
- $('main .deleted').prepend($(this));
-
- var $listItem = GetListItemByID($(this).attr('data-listid'));
- $listItem.Status = 'deleted';
- SaveList();
- });*/
-
-/*$(document).on('click', '.deleted .entry', function () {
- $('main .closed').prepend($(this));
-
- var $listItem = GetListItemByID($(this).attr('data-listid'));
- $listItem.Status = 'closed';
- SaveList();
- });*/
-
-$(document).on('touchstart', '.entry', function(event){
+$(document).on('touchstart', '.entry', function (event) {
     if ($(this).find('.edit-button').length == 0)
-        $(this).append('<span class="edit-button fa"></span><span class="trash-button fa"></span><span class="undo-button fa"></span>');
+        $(this).append('<span class="edit-button fa"></span><span class="trash-button fa"></span><span class="undo-button fa"></span><span class="check-button fa"></span>');
+    targetClassList = $(this).attr('class').split(/\s+/);
+    firstTouch = true;
     handleTouchStart(event);
 });
-/*$(document).on('touchend', '.entry', function (evt) {
- console.log(evt);
- });*/
+$(document).on('touchend', '.entry', function (evt) {
+    //console.log(evt);
+    targetClassList = [];
+    if (removeClassesAtEnd)
+        // schliesst alle offenen Optionen der Tasks
+        RemoveAllLeftAndRightClasses();
+    removeClassesAtEnd = false;
+});
 $(document).on('touchmove', '.entry', function (evt) {
-    RemoveAllTrashAndEditClasses();
+    // schliesst alle offenen Optionen der Tasks
+    RemoveAllLeftAndRightClasses();
     var $currentElement = $(this);
     var $currentListID = $(this).attr('data-listid');
     switch (handleTouchMove(evt)) {
         case 'left':
-            $(this).addClass('trash');
-            /*            $('main .closed').prepend($currentElement);
-             var $listItem = GetListItemByID($currentListID);
-             $listItem.Status = 'closed';
-             SaveList();
-             */
+            if ($.inArray('leftButtons', targetClassList) < 0)
+                $(this).addClass('rightButtons');
             break;
         case 'right':
-            $(this).addClass('edit');
-            /*            $('main .open').prepend($currentElement);
-             var $listItem = GetListItemByID($currentListID);
-             $listItem.Status = 'open';
-             SaveList();
-             */
+            if ($.inArray('leftButtons', targetClassList) >= 0 && firstTouch) {
+                firstTouch = false;
+                removeClassesAtEnd = true;
+                if ($currentElement.parent().hasClass('open')) {
+                    CloseToDo($currentListID);
+                } else {
+                    UndoToDo($currentListID);
+                }
+            } else if ($.inArray('rightButtons', targetClassList) < 0 && !removeClassesAtEnd)
+                $(this).addClass('leftButtons');
             break;
         case 'down':
             //window.location.href = 'detail.html?id=' + $currentListID;
@@ -159,11 +203,11 @@ $(document).on('touchmove', '.entry', function (evt) {
     }
 });
 
-//document.addEventListener('touchstart', handleTouchStart, false);
-//document.addEventListener('touchmove', handleTouchMove, false);
-
 var xDown = null;
 var yDown = null;
+var targetClassList = [];
+var firstTouch = false;
+var removeClassesAtEnd = false;
 
 function handleTouchStart(evt) {
     xDown = evt.touches[0].clientX;
@@ -180,9 +224,6 @@ function handleTouchMove(evt) {
 
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
-
-    //console.log('x:', xDiff);
-    //console.log('y:', yDiff);
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
         if (xDiff > 0) {
