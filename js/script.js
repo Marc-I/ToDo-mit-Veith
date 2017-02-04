@@ -83,6 +83,16 @@ $(document).on('click', '.trash-button', function (event) {
     SaveList();
 });
 
+$(document).on('click', '.undo-button', function (event) {
+    event.stopPropagation();
+    $('main .open').prepend($(this).parent());
+    RemoveAllTrashAndEditClasses();
+
+    var $listItem = GetListItemByID($(this).parent().attr('data-listid'));
+    $listItem.Status = 'open';
+    SaveList();
+});
+
 $(document).on('click', '.edit-button', function (event) {
     event.stopPropagation();
     var $currentListID = $(this).parent().attr('data-listid');
@@ -116,7 +126,7 @@ $(document).on('click', '.open .entry', function () {
 
 $(document).on('touchstart', '.entry', function(event){
     if ($(this).find('.edit-button').length == 0)
-        $(this).append('<span class="edit-button fa"></span><span class="trash-button fa"></span>');
+        $(this).append('<span class="edit-button fa"></span><span class="trash-button fa"></span><span class="undo-button fa"></span>');
     handleTouchStart(event);
 });
 /*$(document).on('touchend', '.entry', function (evt) {

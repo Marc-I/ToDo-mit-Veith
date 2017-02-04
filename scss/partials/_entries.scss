@@ -28,14 +28,23 @@ main .open, main .closed, main .deleted {
   .open & {
     background-color: $EntryBgColor;
     color: $EntryTextColor;
+    &.trash .undo-button {
+      display: none;
+    }
   }
   .closed & {
     background-color: $EntryBgColor_closed;
     color: $EntryTextColor_closed;
+    &.trash .trash-button {
+      display: none;
+    }
   }
   .deleted & {
     background-color: $EntryBgColor_deleted;
     color: $EntryTextColor_deleted;
+    &.trash .trash-button {
+      display: none;
+    }
   }
 
   &.edit {
@@ -46,7 +55,7 @@ main .open, main .closed, main .deleted {
     transform: translateX(-100px);
     position: relative;
   }
-  .edit-button, .trash-button {
+  .edit-button, .trash-button, .undo-button {
     position: absolute;
     top: 0;
     width: 99px;
@@ -71,6 +80,17 @@ main .open, main .closed, main .deleted {
     &:after {
       position: absolute;
       content: "\f014";
+      top: 50%;
+      left: 50%;
+      margin: -16px;
+    }
+  }
+  .undo-button {
+    left: calc(100% + 1px);
+    background-color: $EntryBgColor;
+    &:after {
+      position: absolute;
+      content: "\f0e2";
       top: 50%;
       left: 50%;
       margin: -16px;
