@@ -3,7 +3,7 @@
  */
 
 // Variable, die alle Tasks enthält
-var $MyToDoList;
+var myToDoList;
 
 // wird ausgeführt, wenn die Seite komplett geladen ist
 $(document).ready(function () {
@@ -12,25 +12,28 @@ $(document).ready(function () {
     LoadList();
 
     // alle Tasks werden dem DOM hinzugefügt
-    for (var i = 0; i < $MyToDoList.length; i++) {
-        AddItem($MyToDoList[i]);
+    for (var i = 0; i < myToDoList.length; i++) {
+        AddItemToDomList(myToDoList[i]);
     }
 });
 
-// ein einzelner Task dem DOM hinzufügen
-function AddItem($ToDoItem) {
+/**
+ * einen einzelnen Task dem DOM hinzufügen
+ * @param todoItem Objekt
+ */
+function AddItemToDomList(todoItem) {
 
     // ein Listenpunkt erstellen
     var $listItem = $('<li class="entry"></li>');
 
     // dem Listenpunkt das Attribut "data-listid" hinzufügen
-    $listItem.attr('data-listid', $ToDoItem.ID);
+    $listItem.attr('data-listid', todoItem.ID);
 
     // ein Tasktitel-Element erstellen
     var $titleItem = $('<h2></h2>');
 
     // dem Tasktitel-Element den Titeltext hinzufügen
-    $titleItem.text($ToDoItem.Title);
+    $titleItem.text(todoItem.Title);
 
     // dem Listenpunk die Navigationspunke (Uhr und Tags), sowie das Titel-Element hinzufügen
     $listItem
@@ -38,7 +41,7 @@ function AddItem($ToDoItem) {
         .append($titleItem);
 
     // der richtigen Liste den Listenpunkt hinzufügen
-    $('main .' + $ToDoItem.Status).prepend($listItem);
+    $('main .' + todoItem.Status).prepend($listItem);
 }
 
 // Funktion, die alle Tasks aus dem LocalStorage lädt
@@ -54,7 +57,7 @@ function LoadList() {
         if ($result != null) {
 
             // parst das $result aus einem String in Tasks und weist diese der Liste zu
-            $MyToDoList = JSON.parse($result);
+            myToDoList = JSON.parse($result);
 
             // bricht die Funktion vorzeitig ab
             return;
@@ -62,7 +65,7 @@ function LoadList() {
     }
 
     // falls die Funktion nicht vorzeitig abgebrochen wurde, wir ein leerer Array der Liste zugewiesen
-    $MyToDoList = [];
+    myToDoList = [];
 }
 
 // Funktion, die alle Tasks im LocalStorage speichert
@@ -72,7 +75,7 @@ function SaveList() {
     if (typeof (Storage) !== undefined)
 
     // fügt dem LocalStorage die Liste als String hinzu
-        localStorage.setItem('MyToDoList', JSON.stringify($MyToDoList));
+        localStorage.setItem('MyToDoList', JSON.stringify(myToDoList));
 }
 
 // wird ausgeführt, wenn im Suchfeld eine Taste gedrückt wird
@@ -88,10 +91,10 @@ $(document).on('keydown', '#search input', function (event) {
         var newItem = {Status: 'open', Title: $(this).val(), ID: GetNextID()};
 
         // fügt den neuen Task dem DOM hinzu
-        AddItem(newItem);
+        AddItemToDomList(newItem);
 
         // fügt der Liste den Task hinzu
-        $MyToDoList.push(newItem);
+        myToDoList.push(newItem);
 
         // speichert die Liste
         SaveList();
@@ -105,11 +108,11 @@ $(document).on('keydown', '#search input', function (event) {
 function GetNextID() {
 
     // prüft, ob die Liste nicht existiert oder leer ist und gibt dann 1 zurück
-    if ($MyToDoList == null || $MyToDoList.length == 0)
+    if (myToDoList == null || myToDoList.length == 0)
         return 1;
     
     // gibt die grösste ID zurück
-    var $result = Math.max.apply(null, $MyToDoList.map(function (o) {
+    var $result = Math.max.apply(null, myToDoList.map(function (o) {
         return o.ID;
     }));
     
@@ -118,11 +121,11 @@ function GetNextID() {
 }
 
 // Funktion, die ein Task anhand der ID zurückgibt
-function GetListItemByID($ListID) {
+function GetListItemByID(ListID) {
     
     // filtert die Liste nach der übergebenen ID und gibt das erste Element zurück
-    return $MyToDoList.filter(function (f) {
-        return f.ID == $ListID;
+    return myToDoList.filter(function (f) {
+        return f.ID == ListID;
     })[0];
 }
 
