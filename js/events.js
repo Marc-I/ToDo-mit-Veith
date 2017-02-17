@@ -1,13 +1,20 @@
 /**
  * Created by marc-iten on 16.02.17.
+ * In dieser Datei werden Events abgearbeitet
  */
 
 $(document).ready(function () {
     var tasks = new Tasks();
     var domEvents = new DomEvents();
 
+    /**
+     * wird ausgeführt, wenn das DOM geladen wurde
+     */
     tasks.Init();
 
+    /**
+     * wird bei jedem Tastendruck im Suchfeld ausgeführt
+     */
     $('#search input').on('keydown', function (event) {
         domEvents.RemoveAllLeftAndRightClasses();
         if (event.keyCode == 13) {
@@ -16,35 +23,55 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * wird beim Klick auf den 'Erledigt'-Button ausgeführt
+     */
     $(document).on('click', '.check-button', function (event) {
         domEvents.RemoveAllLeftAndRightClasses();
         tasks.Settle($(this).parent().attr('data-listid'));
     });
 
+    /**
+     * wird beim Klick auf den 'ErledigtRückgängig'-Button ausgeführt
+     */
     $(document).on('click', '.undo-button', function (event) {
         domEvents.RemoveAllLeftAndRightClasses();
         tasks.Undo($(this).parent().attr('data-listid'));
     });
 
+    /**
+     * wird beim Klick auf den 'Gelöscht'-Button ausgeführt
+     */
     $(document).on('click', '.trash-button', function (event) {
         domEvents.RemoveAllLeftAndRightClasses();
         tasks.Delete($(this).parent().attr('data-listid'));
     });
 
+    /**
+     * wird beim Klick auf den 'Bearbeiten'-Button ausgeführt
+     */
     $(document).on('click', '.edit-button', function (event) {
         domEvents.RemoveAllLeftAndRightClasses();
         tasks.Edit($(this).parent().attr('data-listid'));
     });
 
+    /**
+     * wird ausgeführt, wenn auf den Schliessen-Button in den Details geklickt wird
+     */
     $(document).on('click', '.detail .close', function (event) {
        $('.detail').remove();
     });
 
+    /**
+     * wird ausgeführt, wenn auf den Speichern-Button in den Details geklickt wird
+     */
     $(document).on('click', '.detail .save', function (event) {
         tasks.SetCaption($('#TaskID').val(), $('#TaskCaption').val());
     });
 
-    // EventHandler bei einem Swipe (start)
+    /**
+     * EventHandler bei einem Swipe (start)
+     */
     $(document).on('touchstart', '.entry', function (event) {
 
         // prüft, ob ein Bearbeiten-Button in diesem DOM-Element existiert
@@ -63,7 +90,9 @@ $(document).ready(function () {
         handleTouchStart(event);
     });
 
-    // EventHandler bei einem Swipe (ende)
+    /**
+     * EventHandler bei einem Swipe (ende)
+     */
     $(document).on('touchend', '.entry', function (evt) {
 
         // weisst der targetClassList einen leeren Array zu
@@ -79,7 +108,9 @@ $(document).ready(function () {
         removeClassesAtEnd = false;
     });
 
-    // EventHandler bei einem Swipe (ziehen)
+    /**
+     * EventHandler bei einem Swipe (ziehen)
+     */
     $(document).on('touchmove', '.entry', function (evt) {
 
         // wählt die TaskID des aktuellen Elements
@@ -149,7 +180,10 @@ var targetClassList = [];
 var firstTouch = false;
 var removeClassesAtEnd = false;
 
-// Funktion, die beim Start des Swipe ausgeführt wird
+/**
+ * Funktion, die beim Start des Swipe ausgeführt wird
+ * @param evt
+ */
 function handleTouchStart(evt) {
 
     // die Anfangs-X-Position wird der Variable xDown zugewiesen
@@ -159,7 +193,12 @@ function handleTouchStart(evt) {
     yDown = evt.touches[0].clientY;
 };
 
-// Funktion, die beim wischen ausgeführt wird
+/**
+ * Funktion, die beim wischen ausgeführt wird
+ * @param evt
+ * @returns {string}
+ *  Wischrichtung oder null
+ */
 function handleTouchMove(evt) {
 
     // falls die Variabeln xDown und yDown nicht gesetzt sind, wird die Funktion abgebrochen

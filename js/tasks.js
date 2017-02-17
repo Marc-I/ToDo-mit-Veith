@@ -4,7 +4,11 @@
 
 var Tasks = function () {
 
-    // laden
+    /**
+     * lädt Tasks aus dem LocalStorage
+     * @returns {Array}
+     * @private
+     */
     function _load() {
         if (typeof (Storage) !== undefined) {
             var tmp = localStorage.getItem('TaskItems');
@@ -14,7 +18,14 @@ var Tasks = function () {
         return [];
     }
 
-    // speichern
+    /**
+     * speichert Tasks in den LocalStorage
+     * @param {Array} tasks
+     *  Array von Tasks
+     * @returns {boolean}
+     *  'true', wenn erfolgreich
+     * @private
+     */
     function _save(tasks) {
         if (typeof (Storage) !== undefined) {
             localStorage.setItem('TaskItems', JSON.stringify(tasks));
@@ -23,6 +34,11 @@ var Tasks = function () {
         return false;
     }
 
+    /**
+     * Berechnet die nächste freie ID
+     * @returns {number}
+     * @private
+     */
     function _getNextID() {
         var tasks = _load();
 
@@ -35,6 +51,10 @@ var Tasks = function () {
         return result == null ? 1 : result + 1;
     }
 
+    /**
+     * Lädt alle Tasks und gibt diese aus
+     * @constructor
+     */
     function Init() {
         var tasks = _load();
         tasks.filter(function (e, i, a) {
@@ -44,7 +64,12 @@ var Tasks = function () {
         });
     }
 
-    // hinzufügen (caption) => id || null
+    /**
+     * fügt einen Task zur Liste hinzu
+     * @param {string} Caption
+     * @returns {boolean}
+     * @constructor
+     */
     function Add(Caption) {
         var newTask = {ID: _getNextID(), Caption: Caption, Status: "open"};
 
@@ -56,35 +81,77 @@ var Tasks = function () {
         return true;
     }
 
-    function _changeStatus(TaskID, Status, Action) {
+    /**
+     * ändert den Status eines Tasks
+     * @param {number} TaskID
+     * @param {string} Status
+     *  'open' | 'closed' | 'deleted'
+     * @returns {boolean}
+     * @private
+     */
+    function _changeStatus(TaskID, Status) {
         var tasks = _load();
         var task = tasks.filter(function (e, i, a) {
             return e.ID == TaskID;
         });
         if(task.length != 1)
-            return false;
+            return null;
         task[0].Status = Status;
-        _save(tasks);
+        if(_save(tasks))
+            return task[0];
+    }
 
-        _handler(task[0], Action != null ? Action : 'move');
+    /**
+     * führt eine Aktion mit einem Task aus
+     * @param {Task} Task
+     * @param {string} Action
+     * @returns {boolean}
+     * @private
+     */
+    function _callActionAfterStatus(Task, Action) {
+        _handler(Task, Action != null ? Action : 'move');
         return true;
     }
 
-    // erledigen (id)
+    /**
+     * ein Task wird als 'erledigt' markiert
+     * @param {number} TaskID
+     * @returns {boolean}
+     * @constructor
+     */
     function Settle(TaskID) {
-        return _changeStatus(TaskID, 'closed');
+        var task = _changeStatus(TaskID, 'closed');
+        return _callActionAfterStatus(task);
     }
 
-    // aktivieren (id)
+    /**
+     * ein Task wird als 'offen' markiert
+     * @param {nummer} TaskID
+     * @returns {boolean}
+     * @constructor
+     */
     function Undo(TaskID) {
-        return _changeStatus(TaskID, 'open');
+        var task = _changeStatus(TaskID, 'open');
+        return _callActionAfterStatus(task);
     }
 
-    // löschen (id)
+    /**
+     * ein Task wird als 'gelöscht' markiert
+     * @param {number} TaskID
+     * @returns {boolean}
+     * @constructor
+     */
     function Delete(TaskID) {
-        return _changeStatus(TaskID, 'deleted', 'remove');
+        var task = _changeStatus(TaskID, 'deleted');
+        return _callActionAfterStatus(task, 'remove');
     }
 
+    /**
+     * ein Task wird zur Bearbeitung geladen
+     * @param {number} TaskID
+     * @returns {boolean}
+     * @constructor
+     */
     function Edit(TaskID) {
         var tasks = _load();
         var task = tasks.filter(function (e, i, a) {
@@ -98,7 +165,13 @@ var Tasks = function () {
         return true;
     }
 
-    // aktualisieren (id, caption)
+    /**
+     * der Titel eines Tasks wird geändert
+     * @param {number} TaskID
+     * @param {string} Caption
+     * @returns {boolean}
+     * @constructor
+     */
     function SetCaption(TaskID, Caption) {
         var tasks = _load();
         var task = tasks.filter(function (e, i, a) {
@@ -116,12 +189,19 @@ var Tasks = function () {
     }
 
     var domEvents = new DomEvents();
+
+    /**
+     * es werden weitere Funktionen ausgeführt
+     * @param {any} Value
+     * @param {string} Type
+     * @private
+     */
     function _handler(Value, Type) {
         switch (Type) {
             case 'add': domEvents.AddTask(Value); break;
             case 'move': domEvents.MoveTask(Value); break;
             case 'remove': domEvents.RemoveTask(Value); break;
-            case 'edit': domEvents.EditTask(Value); break;
+            case 'edit': domEvents.ShowTaskDetails(Value); break;
             case 'closedetails': domEvents.CloseDetails(Value); break;
         }
     }

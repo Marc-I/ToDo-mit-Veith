@@ -4,6 +4,11 @@
 
 var DomEvents = function () {
 
+    /**
+     * fügt einen Task dem DOM hinzu
+     * @param {task} Task
+     * @constructor
+     */
     function AddTask(Task) {
 
         var $listItem = $('<li class="entry"></li>');
@@ -19,15 +24,30 @@ var DomEvents = function () {
         $('main .' + Task.Status).prepend($listItem);
     }
 
+    /**
+     * verschiebt einen Task von einer Liste zu einer Anderen
+     * @param {task} Task
+     * @constructor
+     */
     function MoveTask(Task) {
         $('.entry[data-listid="' + Task.ID + '"]').prependTo('main .' + Task.Status);
     }
 
+    /**
+     * entfernt einen Task aus dem DOM
+     * @param {task} Task
+     * @constructor
+     */
     function RemoveTask(Task) {
         $('.entry[data-listid="' + Task.ID + '"]').remove();
     }
 
-    function EditTask(Task) {
+    /**
+     * öffnet die Detailansicht eines Tasks
+     * @param {task} Task
+     * @constructor
+     */
+    function ShowTaskDetails(Task) {
         var $popover = $('<div class="detail"></div>');
 
         var $id = $('<div class="id"><input type="hidden" value="' + Task.ID + '" id="TaskID"></div>');
@@ -51,17 +71,30 @@ var DomEvents = function () {
         $('body').append($popover);
     }
 
+    /**
+     * schliesst die Detailansicht
+     * @param Task
+     * @constructor
+     */
     function CloseDetails(Task) {
         _changeTask(Task);
         $('.detail').remove();
     }
 
+    /**
+     * ändert den Text in einem Task
+     * @param {task} Task
+     * @private
+     */
     function _changeTask(Task) {
         var $task = $('.entry[data-listid="' + Task.ID + '"]');
         $task.children('h2').text(Task.Caption);
     }
 
-    // Funktion, die alle offenen Optionen der Tasks schliesst
+    /**
+     * alle offenen Optionen der Tasks werden geschlossen
+     * @constructor
+     */
     function RemoveAllLeftAndRightClasses() {
 
         // entfernt alle "rightButtons"-Klassen
@@ -75,7 +108,7 @@ var DomEvents = function () {
         AddTask: AddTask,
         MoveTask: MoveTask,
         RemoveTask: RemoveTask,
-        EditTask: EditTask,
+        EditTask: ShowTaskDetails,
         CloseDetails: CloseDetails,
         RemoveAllLeftAndRightClasses: RemoveAllLeftAndRightClasses,/**/
     };
