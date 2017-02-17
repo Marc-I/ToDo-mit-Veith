@@ -37,14 +37,16 @@ var Tasks = function () {
 
     function Init() {
         var tasks = _load();
-        tasks.forEach(function (e, i, a) {
+        tasks.filter(function (e, i, a) {
+            return e.Status != 'deleted';
+        }).forEach(function (e, i, a) {
             _handler(e, 'add')
         });
     }
 
     // hinzufügen (caption) => id || null
     function Add(Caption) {
-        var newTask = {ID: _getNextID(), Caption: Caption, Status: "open"}
+        var newTask = {ID: _getNextID(), Caption: Caption, Status: "open"};
 
         var tasks = _load();
         tasks.push(newTask);
@@ -54,7 +56,7 @@ var Tasks = function () {
         return true;
     }
 
-    function _changeStatus(TaskID, Status) {
+    function _changeStatus(TaskID, Status, Action) {
         var tasks = _load();
         var task = tasks.filter(function (e, i, a) {
             return e.ID == TaskID;
@@ -64,7 +66,7 @@ var Tasks = function () {
         task[0].Status = Status;
         _save(tasks);
 
-        _handler(task[0], 'move');
+        _handler(task[0], Action != null ? Action : 'move');
         return true;
     }
 
@@ -80,16 +82,47 @@ var Tasks = function () {
 
     // löschen (id)
     function Delete(TaskID) {
-        return _changeStatus(TaskID, 'deleted');
+        return _changeStatus(TaskID, 'deleted', 'remove');
+    }
+
+    function Edit(TaskID) {
+        var tasks = _load();
+        var task = tasks.filter(function (e, i, a) {
+            return e.ID == TaskID;
+        });
+        if(task.length != 1)
+            return false;
+
+        _handler(task[0], 'edit');
+
+        return true;
     }
 
     // aktualisieren (id, caption)
+    function SetCaption(TaskID, Caption) {
+        var tasks = _load();
+        var task = tasks.filter(function (e, i, a) {
+            return e.ID == TaskID;
+        });
+        if(task.length != 1)
+            return false;
+
+        task[0].Caption = Caption;
+        _save(tasks);
+
+        _handler(task[0], 'closedetails');
+
+        return true;
+    }
 
     var domEvents = new DomEvents();
     function _handler(Value, Type) {
         switch (Type) {
             case 'add': domEvents.AddTask(Value); break;
             case 'move': domEvents.MoveTask(Value); break;
+            case 'remove': domEvents.RemoveTask(Value); break;
+            case 'edit': domEvents.EditTask(Value); break;
+            case 'closedetails': domEvents.CloseDetails(Value); break;
         }
     }
 
@@ -99,6 +132,8 @@ var Tasks = function () {
         Settle: Settle,
         Undo: Undo,
         Delete: Delete,
+        Edit: Edit,
+        SetCaption: SetCaption,
     };
 }
 

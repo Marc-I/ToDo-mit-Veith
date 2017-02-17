@@ -31,6 +31,19 @@ $(document).ready(function () {
         tasks.Delete($(this).parent().attr('data-listid'));
     });
 
+    $(document).on('click', '.edit-button', function (event) {
+        domEvents.RemoveAllLeftAndRightClasses();
+        tasks.Edit($(this).parent().attr('data-listid'));
+    });
+
+    $(document).on('click', '.detail .close', function (event) {
+       $('.detail').remove();
+    });
+
+    $(document).on('click', '.detail .save', function (event) {
+        tasks.SetCaption($('#TaskID').val(), $('#TaskCaption').val());
+    });
+
     // EventHandler bei einem Swipe (start)
     $(document).on('touchstart', '.entry', function (event) {
 
