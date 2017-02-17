@@ -94,11 +94,13 @@ var Tasks = function () {
         var task = tasks.filter(function (e, i, a) {
             return e.ID == TaskID;
         });
-        if(task.length != 1)
+        if (task.length != 1) {
             return null;
+        }
         task[0].Status = Status;
-        if(_save(tasks))
+        if (_save(tasks)) {
             return task[0];
+        }
     }
 
     /**
@@ -157,7 +159,7 @@ var Tasks = function () {
         var task = tasks.filter(function (e, i, a) {
             return e.ID == TaskID;
         });
-        if(task.length != 1)
+        if (task.length != 1)
             return false;
 
         _handler(task[0], 'edit');
@@ -177,7 +179,7 @@ var Tasks = function () {
         var task = tasks.filter(function (e, i, a) {
             return e.ID == TaskID;
         });
-        if(task.length != 1)
+        if (task.length != 1)
             return false;
 
         task[0].Caption = Caption;
@@ -198,12 +200,35 @@ var Tasks = function () {
      */
     function _handler(Value, Type) {
         switch (Type) {
-            case 'add': domEvents.AddTask(Value); break;
-            case 'move': domEvents.MoveTask(Value); break;
-            case 'remove': domEvents.RemoveTask(Value); break;
-            case 'edit': domEvents.ShowTaskDetails(Value); break;
-            case 'closedetails': domEvents.CloseDetails(Value); break;
+            case 'add':
+                domEvents.AddTask(Value);
+                //facebook.add();
+                break;
+            case 'move':
+                domEvents.MoveTask(Value);
+                break;
+            case 'remove':
+                domEvents.RemoveTask(Value);
+                break;
+            case 'edit':
+                domEvents.ShowTaskDetails(Value);
+                break;
+            case 'closedetails':
+                domEvents.CloseDetails(Value);
+                break;
         }
+    }
+
+    function _addHandler(Task) {
+        domEvents.AddTask(Task);
+    }
+
+    function _moveHandler(Task) {
+        domEvents.MoveTask(Task);
+    }
+
+    function _removeHandler(TaskID) {
+        domEvents.RemoveTask(TaskID);
     }
 
     return {

@@ -1,11 +1,10 @@
 /**
- * Created by marc-iten on 16.02.17.
  * In dieser Datei werden Events abgearbeitet
+ * Created by marc-iten on 16.02.17.
  */
 
 $(document).ready(function () {
     var tasks = new Tasks();
-    var domEvents = new DomEvents();
 
     /**
      * wird ausgeführt, wenn das DOM geladen wurde
@@ -16,7 +15,7 @@ $(document).ready(function () {
      * wird bei jedem Tastendruck im Suchfeld ausgeführt
      */
     $('#search input').on('keydown', function (event) {
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
         if (event.keyCode == 13) {
             tasks.Add($(this).val());
             $(this).val('');
@@ -27,7 +26,7 @@ $(document).ready(function () {
      * wird beim Klick auf den 'Erledigt'-Button ausgeführt
      */
     $(document).on('click', '.check-button', function (event) {
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
         tasks.Settle($(this).parent().attr('data-listid'));
     });
 
@@ -35,7 +34,7 @@ $(document).ready(function () {
      * wird beim Klick auf den 'ErledigtRückgängig'-Button ausgeführt
      */
     $(document).on('click', '.undo-button', function (event) {
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
         tasks.Undo($(this).parent().attr('data-listid'));
     });
 
@@ -43,7 +42,7 @@ $(document).ready(function () {
      * wird beim Klick auf den 'Gelöscht'-Button ausgeführt
      */
     $(document).on('click', '.trash-button', function (event) {
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
         tasks.Delete($(this).parent().attr('data-listid'));
     });
 
@@ -51,7 +50,7 @@ $(document).ready(function () {
      * wird beim Klick auf den 'Bearbeiten'-Button ausgeführt
      */
     $(document).on('click', '.edit-button', function (event) {
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
         tasks.Edit($(this).parent().attr('data-listid'));
     });
 
@@ -102,7 +101,7 @@ $(document).ready(function () {
         if (removeClassesAtEnd)
 
         // schliesst alle offenen Optionen der Tasks
-            domEvents.RemoveAllLeftAndRightClasses();
+            RemoveAllLeftAndRightClasses();
 
         // setzt die Variable zurück
         removeClassesAtEnd = false;
@@ -123,7 +122,7 @@ $(document).ready(function () {
         }
 
         // schliesst alle offenen Optionen der Tasks
-        domEvents.RemoveAllLeftAndRightClasses();
+        RemoveAllLeftAndRightClasses();
 
         // führt die Basis-Funktion für einen Swipe aus und handelt das Ergebnis
         switch (move) {
@@ -246,3 +245,17 @@ function handleTouchMove(evt) {
     yDown = null;
     return null;
 };
+
+
+/**
+ * alle offenen Optionen der Tasks werden geschlossen
+ * @constructor
+ */
+function RemoveAllLeftAndRightClasses() {
+
+    // entfernt alle "rightButtons"-Klassen
+    $('.rightButtons').removeClass('rightButtons');
+
+    // entfernt alle "leftButtons"-Klassen
+    $('.leftButtons').removeClass('leftButtons');
+}

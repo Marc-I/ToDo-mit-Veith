@@ -5,12 +5,12 @@
 var DomEvents = function () {
 
     /**
-     * fügt einen Task dem DOM hinzu
+     * erstellt ein virtuelles DOM-Element
      * @param {task} Task
-     * @constructor
+     * @returns {*|jQuery|HTMLElement}
+     * @private
      */
-    function AddTask(Task) {
-
+    function _createTaskElement(Task) {
         var $listItem = $('<li class="entry"></li>');
         $listItem.attr('data-listid', Task.ID);
 
@@ -20,7 +20,16 @@ var DomEvents = function () {
         $listItem
             .append('<nav><span class="fa fa-clock-o"></span><span class="fa fa-tags"></span></nav>')
             .append($titleItem);
+        return $listItem;
+    }
 
+    /**
+     * fügt einen Task dem DOM hinzu
+     * @param {task} Task
+     * @constructor
+     */
+    function AddTask(Task) {
+        var $listItem = _createTaskElement(Task);
         $('main .' + Task.Status).prepend($listItem);
     }
 
@@ -91,25 +100,11 @@ var DomEvents = function () {
         $task.children('h2').text(Task.Caption);
     }
 
-    /**
-     * alle offenen Optionen der Tasks werden geschlossen
-     * @constructor
-     */
-    function RemoveAllLeftAndRightClasses() {
-
-        // entfernt alle "rightButtons"-Klassen
-        $('.rightButtons').removeClass('rightButtons');
-
-        // entfernt alle "leftButtons"-Klassen
-        $('.leftButtons').removeClass('leftButtons');
-    }
-
     return {
         AddTask: AddTask,
         MoveTask: MoveTask,
         RemoveTask: RemoveTask,
         EditTask: ShowTaskDetails,
         CloseDetails: CloseDetails,
-        RemoveAllLeftAndRightClasses: RemoveAllLeftAndRightClasses,/**/
     };
 }
