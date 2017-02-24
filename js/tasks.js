@@ -8,7 +8,7 @@ var Tasks = function () {
         return $.ajax({
             type: "GET",
             url: "api/tasklist.json",
-            dataType: "json",
+            dataType: "json"
         })
             .fail(function (e) {
                 console.error(e);
@@ -38,13 +38,6 @@ var Tasks = function () {
         });
 
         return response;
-
-        // if (typeof (Storage) !== undefined) {
-        //     var tmp = localStorage.getItem('TaskItems');
-        //     if (tmp != null)
-        //         return JSON.parse(tmp);
-        // }
-        // return [];
     }
 
     /**
@@ -56,7 +49,7 @@ var Tasks = function () {
      * @private
      */
     function _save(tasks) {
-        if (typeof (Storage) !== undefined) {
+        if (typeof (Storage) !== 'undefined') {
             localStorage.setItem('TaskItems', JSON.stringify(tasks));
             return true;
         }
@@ -92,18 +85,10 @@ var Tasks = function () {
                data.filter(function (e, i, a) {
                    return e.Status != 'deleted';
                }).forEach(function (e, i, a) {
-                   _handler(e, 'add')
+                   _addHandler(e);
                });
            }
        });
-        // var tasks = _load();
-        // if (tasks && tasks.length > 0) {
-        //     tasks.filter(function (e, i, a) {
-        //         return e.Status != 'deleted';
-        //     }).forEach(function (e, i, a) {
-        //         _handler(e, 'add')
-        //     });
-        // }
     }
 
     /**
@@ -119,7 +104,7 @@ var Tasks = function () {
         tasks.push(newTask);
         _save(tasks);
 
-        _handler(newTask, 'add');
+        _addHandler(newTask);
         return true;
     }
 
@@ -153,7 +138,7 @@ var Tasks = function () {
      * @private
      */
     function _callActionAfterStatus(Task, Action) {
-        _handler(Task, Action != null ? Action : 'move');
+        _moveHandler(Task);
         return true;
     }
 
@@ -204,7 +189,7 @@ var Tasks = function () {
         if (task.length != 1)
             return false;
 
-        _handler(task[0], 'edit');
+        _editHandler(task[0]);
 
         return true;
     }
@@ -227,7 +212,7 @@ var Tasks = function () {
         task[0].Caption = Caption;
         _save(tasks);
 
-        _handler(task[0], 'closedetails');
+        _closeHandler(task[0]);
 
         return true;
     }
@@ -240,26 +225,6 @@ var Tasks = function () {
      * @param {string} Type
      * @private
      */
-    function _handler(Value, Type) {
-        switch (Type) {
-            case 'add':
-                domEvents.AddTask(Value);
-                //facebook.add();
-                break;
-            case 'move':
-                domEvents.MoveTask(Value);
-                break;
-            case 'remove':
-                domEvents.RemoveTask(Value);
-                break;
-            case 'edit':
-                domEvents.EditTask(Value);
-                break;
-            case 'closedetails':
-                domEvents.CloseDetails(Value);
-                break;
-        }
-    }
 
     function _addHandler(Task) {
         domEvents.AddTask(Task);
