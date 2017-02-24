@@ -4,18 +4,60 @@
 
 var Tasks = function () {
 
+    function _loadAllTasks() {
+        $.ajax({
+            type: "GET",
+            url: "api/tasklist.json",
+            dataType: "json",
+        })
+            .done(_writeAllTasks)
+            .fail(_writeError);
+    }
+
+    function _writeAllTasks(data) {
+        if (data && data.length > 0) {
+            data.filter(function (e, i, a) {
+                return e.Status != 'deleted';
+            }).forEach(function (e, i, a) {
+                _handler(e, 'add')
+            });
+        }
+    }
+
+    function _writeError(data) {
+        console.error(data);
+    }
+
     /**
      * lädt Tasks aus dem LocalStorage
      * @returns {Array}
      * @private
      */
     function _load() {
-        if (typeof (Storage) !== undefined) {
-            var tmp = localStorage.getItem('TaskItems');
-            if (tmp != null)
-                return JSON.parse(tmp);
-        }
-        return [];
+        var response;
+
+        $.ajax({
+            type: "GET",
+            url: "api/tasklist.json",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                response = data;
+            },
+            error: function (data) {
+                console.error(data);
+                response = [];
+            }
+        });
+
+        return response;
+
+        // if (typeof (Storage) !== undefined) {
+        //     var tmp = localStorage.getItem('TaskItems');
+        //     if (tmp != null)
+        //         return JSON.parse(tmp);
+        // }
+        // return [];
     }
 
     /**
@@ -56,12 +98,15 @@ var Tasks = function () {
      * @constructor
      */
     function Init() {
-        var tasks = _load();
-        tasks.filter(function (e, i, a) {
-            return e.Status != 'deleted';
-        }).forEach(function (e, i, a) {
-            _handler(e, 'add')
-        });
+        _loadAllTasks();
+        // var tasks = _load();
+        // if (tasks && tasks.length > 0) {
+        //     tasks.filter(function (e, i, a) {
+        //         return e.Status != 'deleted';
+        //     }).forEach(function (e, i, a) {
+        //         _handler(e, 'add')
+        //     });
+        // }
     }
 
     /**
@@ -233,6 +278,10 @@ var Tasks = function () {
 
     function _editHandler(Task) {
         domEvents.EditTask(Task);
+    }
+
+    function _closeHandler(Task) {
+        domEvents.CloseDetails(Task);
     }
 
     return {
