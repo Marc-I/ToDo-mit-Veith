@@ -211,7 +211,7 @@ var Tasks = function () {
                 domEvents.RemoveTask(Value);
                 break;
             case 'edit':
-                domEvents.ShowTaskDetails(Value);
+                domEvents.EditTask(Value);
                 break;
             case 'closedetails':
                 domEvents.CloseDetails(Value);
@@ -231,6 +231,10 @@ var Tasks = function () {
         domEvents.RemoveTask(TaskID);
     }
 
+    function _editHandler(Task) {
+        domEvents.EditTask(Task);
+    }
+
     return {
         Init: Init,
         Add: Add,
@@ -240,5 +244,9 @@ var Tasks = function () {
         Edit: Edit,
         SetCaption: SetCaption,
     };
-}
+};
+
+
+
+
 

@@ -105,6 +105,6 @@ var DomEvents = function () {
         MoveTask: MoveTask,
         RemoveTask: RemoveTask,
         EditTask: ShowTaskDetails,
-        CloseDetails: CloseDetails,
+        CloseDetails: CloseDetails
     };
-}
+};
