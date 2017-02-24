@@ -7,7 +7,7 @@ var Tasks = function () {
     function _loadAllTasks() {
         return $.ajax({
             type: "GET",
-            url: "api/tasklist.json",
+            url: "api/tasklist.php",
             dataType: "json"
         })
             .fail(function (e) {
@@ -25,7 +25,7 @@ var Tasks = function () {
 
         $.ajax({
             type: "GET",
-            url: "api/tasklist.json",
+            url: "api/tasklist.php",
             dataType: "json",
             async: false,
             success: function (data) {
