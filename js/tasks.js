@@ -5,27 +5,14 @@
 var Tasks = function () {
 
     function _loadAllTasks() {
-        $.ajax({
+        return $.ajax({
             type: "GET",
             url: "api/tasklist.json",
             dataType: "json",
         })
-            .done(_writeAllTasks)
-            .fail(_writeError);
-    }
-
-    function _writeAllTasks(data) {
-        if (data && data.length > 0) {
-            data.filter(function (e, i, a) {
-                return e.Status != 'deleted';
-            }).forEach(function (e, i, a) {
-                _handler(e, 'add')
+            .fail(function (e) {
+                console.error(e);
             });
-        }
-    }
-
-    function _writeError(data) {
-        console.error(data);
     }
 
     /**
@@ -98,7 +85,17 @@ var Tasks = function () {
      * @constructor
      */
     function Init() {
-        _loadAllTasks();
+       var tasks = _loadAllTasks();
+
+       tasks.done(function (data) {
+           if (data && data.length > 0) {
+               data.filter(function (e, i, a) {
+                   return e.Status != 'deleted';
+               }).forEach(function (e, i, a) {
+                   _handler(e, 'add')
+               });
+           }
+       });
         // var tasks = _load();
         // if (tasks && tasks.length > 0) {
         //     tasks.filter(function (e, i, a) {
