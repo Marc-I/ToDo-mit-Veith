@@ -81,6 +81,7 @@ var Tasks = function () {
        var tasks = _loadAllTasks();
 
        tasks.done(function (data) {
+           console.log(data);
            if (data && data.length > 0) {
                data.filter(function (e, i, a) {
                    return e.Status != 'deleted';
