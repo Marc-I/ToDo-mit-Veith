@@ -16,6 +16,17 @@ a {
   text-decoration: none;
 }
 
+div.button {
+  text-align: center;
+
+  button{
+    margin: 8px;
+    padding: 16px;
+    border-radius: 32px;
+    outline: none;
+  }
+}
+
 @import "partials/search";
 @import "partials/entries";
 @import "partials/detail";

@@ -8,13 +8,21 @@
 
 session_start();
 
-$_SESSION['tasks'][] = [
-        "ID" => (count($_SESSION['tasks']) + 1),
-        "Caption" => "neu",
-        "Status" => "open"
+$nextID = count($_SESSION['tasks']) + 1;
+
+$newTask = [
+        "ID" => $nextID,
+        "Caption" => $_POST['Caption'],
+        "Status" => 'open'
     ];
+
+if(!isset($_SESSION['tasks']) || !$_SESSION['tasks']){
+    $_SESSION['tasks'] = [];
+}
+
+$_SESSION['tasks'][] = $newTask;
 
 header('Content-Type: text/html; charset=utf-8');
 header('Content-Type: application/json');
 
-echo json_encode($_SESSION['tasks'], JSON_UNESCAPED_UNICODE);
+echo json_encode($newTask, JSON_UNESCAPED_UNICODE);

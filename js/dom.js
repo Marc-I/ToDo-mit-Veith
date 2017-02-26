@@ -30,16 +30,7 @@ var DomEvents = function () {
      */
     function AddTask(Task) {
         var $listItem = _createTaskElement(Task);
-        $('main .' + Task.Status).prepend($listItem);
-    }
-
-    /**
-     * verschiebt einen Task von einer Liste zu einer Anderen
-     * @param {task} Task
-     * @constructor
-     */
-    function MoveTask(Task) {
-        $('.entry[data-listid="' + Task.ID + '"]').prependTo('main .' + Task.Status);
+        $('main .tasklist').prepend($listItem);
     }
 
     /**
@@ -47,8 +38,8 @@ var DomEvents = function () {
      * @param {task} Task
      * @constructor
      */
-    function RemoveTask(Task) {
-        $('.entry[data-listid="' + Task.ID + '"]').remove();
+    function RemoveTask(TaskID) {
+        $('.entry[data-listid="' + TaskID + '"]').remove();
     }
 
     /**
@@ -102,7 +93,6 @@ var DomEvents = function () {
 
     return {
         AddTask: AddTask,
-        MoveTask: MoveTask,
         RemoveTask: RemoveTask,
         EditTask: ShowTaskDetails,
         CloseDetails: CloseDetails

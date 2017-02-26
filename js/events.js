@@ -9,7 +9,7 @@ $(document).ready(function () {
     /**
      * wird ausgeführt, wenn das DOM geladen wurde
      */
-    tasks.Init();
+    tasks.LoadTasks();
 
     /**
      * wird bei jedem Tastendruck im Suchfeld ausgeführt
@@ -58,7 +58,7 @@ $(document).ready(function () {
      * wird ausgeführt, wenn auf den Schliessen-Button in den Details geklickt wird
      */
     $(document).on('click', '.detail .close', function (event) {
-       $('.detail').remove();
+        $('.detail').remove();
     });
 
     /**
@@ -170,6 +170,23 @@ $(document).ready(function () {
                 break;
         }
     });
+
+    /**
+     * Eventhandler bei buttonclick
+     */
+    $(document).on('click', 'button', function (event) {
+        var $button = $(this);
+
+        if ($button.hasClass('closed')) {
+            $('.tasklist').removeClass('open').addClass('closed').html('');
+            $button.removeClass('closed').addClass('open').text('offene anzeigen');
+            tasks.LoadTasks('closed');
+        } else {
+            $('.tasklist').removeClass('closed').addClass('open').html('');
+            $button.removeClass('open').addClass('closed').text('erledigte anzeigen');
+            tasks.LoadTasks();
+        }
+    });
 });
 
 // definieren mehrere Variabeln für den Swipe
@@ -213,7 +230,7 @@ function handleTouchMove(evt) {
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
 
-    if(Math.abs(xDiff) < 10 && Math.abs(yDiff) < 10) {
+    if (Math.abs(xDiff) < 10 && Math.abs(yDiff) < 10) {
         return null;
     }
 
