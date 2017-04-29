@@ -1,2 +1,6 @@
 localhost:9000
 fastcgi / 127.0.0.1:9000 php
+
+mime {
+.json application/json
+}

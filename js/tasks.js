@@ -7,7 +7,7 @@ var Tasks = function () {
     function _loadAllTasks() {
         return $.ajax({
             type: "GET",
-            url: "api/tasklist.json",
+            url: "api/tasks.php",
             dataType: "json"
         })
             .fail(function (e) {
@@ -25,7 +25,7 @@ var Tasks = function () {
 
         $.ajax({
             type: "GET",
-            url: "api/tasklist.json",
+            url: "api/collection_tasks.php",
             dataType: "json",
             async: false,
             success: function (data) {
@@ -78,17 +78,17 @@ var Tasks = function () {
      * @constructor
      */
     function Init() {
-       var tasks = _loadAllTasks();
+        var tasks = _loadAllTasks();
 
-       tasks.done(function (data) {
-           if (data && data.length > 0) {
-               data.filter(function (e, i, a) {
-                   return e.Status != 'deleted';
-               }).forEach(function (e, i, a) {
-                   _addHandler(e);
-               });
-           }
-       });
+        tasks.done(function (data) {
+            if (data && data.length > 0) {
+                data.filter(function (e, i, a) {
+                    return e.Status != 'deleted';
+                }).forEach(function (e, i, a) {
+                    _addHandler(e);
+                });
+            }
+        });
     }
 
     /**
