@@ -13,12 +13,13 @@ switch ($verb) {
         include('alle_tasks.php');
         break;
     case 'POST':
-        include ('add_task.php');
+        include('add_task.php');
         break;
     case 'PATCH':
         // hier sind die werte vom patch drinnen
-     global $_PATCH;
-     $_PATCH = fopen("php://input","r");
+        include('add_task.php');
+        $_PATCH = fopen("php://input", "r");
+        break;
 
 }
 
