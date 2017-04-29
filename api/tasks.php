@@ -14,6 +14,12 @@ switch ($verb) {
         break;
     case 'POST':
         include ('add_task.php');
+        break;
+    case 'PATCH':
+        // hier sind die werte vom patch drinnen
+     global $_PATCH;
+     $_PATCH = fopen("php://input","r");
+
 }
 
 // gib den korrekten header aus

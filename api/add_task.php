@@ -11,7 +11,8 @@
  */
 
 function execute(){
-    $caption = $_REQUEST['caption'];
+
+    $caption = $_POST['caption'];
 
 // id für neuen Task vergeben
     // aktuelle id aus id_file holen
