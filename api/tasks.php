@@ -16,13 +16,16 @@ switch ($verb) {
         include('add_task.php');
         break;
     case 'PATCH':
-        // hier sind die werte vom patch drinnen
-        include('add_task.php');
-        $_PATCH = fopen("php://input", "r");
+        include('aktualisiere_task.php');
+        break;
+
+    case 'DELETE':
+
+        include('loesche_task.php');
         break;
 
 }
 
-// gib den korrekten header aus
+// gib den korrekten headete());r aus
 header('content-type: application/json; charset=UTF-8');
 echo json_encode(execute());

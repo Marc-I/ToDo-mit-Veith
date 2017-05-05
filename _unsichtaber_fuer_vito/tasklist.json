@@ -1,1 +1,112 @@
-[{"id":1,"caption":"W\u00e4sche fddfdf waschen","status":"deleted"},{"id":2,"caption":"K\u00fcche sofort aufr\u00e4umen","status":"open"},{"id":3,"caption":"Salz nachf\u00fcllen","status":"open"},{"id":4,"caption":"Gem\u00fcse kaufen","status":"closed"},{"id":5,"caption":"alle beschriftet","status":"deleted"},{"id":6,"caption":"Test","status":"deleted"},{"id":7,"caption":"ein gel\u00f6schter","status":"deleted"},{"id":8,"caption":"noch einer?","status":"deleted"},{"id":9,"caption":"Das l\u00e4uft super","status":"deleted"},{"id":10,"caption":"Test oder?","status":"deleted"},{"id":11,"caption":"Bett machen","status":"deleted"},{"id":12,"caption":"Hallo Welt","status":"deleted"},{"id":18,"caption":"Ein neuer Task","status":"offen"},{"id":19,"caption":"Ein neuer Task","status":"offen"},{"id":20,"caption":"Ein neuer Task","status":"offen"},{"id":29,"caption":null,"status":"offen"},{"id":30,"caption":null,"status":"offen"},{"id":31,"caption":null,"status":"offen"},{"id":32,"caption":null,"status":"offen"},{"id":33,"caption":null,"status":"offen"}]
+{
+  "1": {
+    "id": 2,
+    "caption": "Küche sofort aufräumen",
+    "status": "open"
+  },
+  "2": {
+    "id": 3,
+    "caption": "Salz nachfüllen",
+    "status": "open"
+  },
+  "3": {
+    "id": 4,
+    "caption": "Gemüse kaufen",
+    "status": "closed"
+  },
+  "4": {
+    "id": 5,
+    "caption": "alle beschriftet",
+    "status": "deleted"
+  },
+  "5": {
+    "id": 6,
+    "caption": "Test",
+    "status": "deleted"
+  },
+  "6": {
+    "id": 7,
+    "caption": "ein gelöschter",
+    "status": "deleted"
+  },
+  "7": {
+    "id": 8,
+    "caption": "noch einer?",
+    "status": "deleted"
+  },
+  "8": {
+    "id": 9,
+    "caption": "Das läuft super",
+    "status": "deleted"
+  },
+  "9": {
+    "id": 10,
+    "caption": "Test oder?",
+    "status": "deleted"
+  },
+  "10": {
+    "id": 11,
+    "caption": "Bett machen",
+    "status": "deleted"
+  },
+  "11": {
+    "id": 12,
+    "caption": "Hallo Welt",
+    "status": "deleted"
+  },
+  "12": {
+    "id": 18,
+    "caption": "Ein neuer Task",
+    "status": "offen"
+  },
+  "13": {
+    "id": 19,
+    "caption": "Ein neuer Task",
+    "status": "offen"
+  },
+  "14": {
+    "id": 20,
+    "caption": "Ein neuer Task",
+    "status": "offen"
+  },
+  "15": {
+    "id": 29,
+    "caption": null,
+    "status": "offen"
+  },
+  "16": {
+    "id": 30,
+    "caption": null,
+    "status": "offen"
+  },
+  "17": {
+    "id": 31,
+    "caption": null,
+    "status": "offen"
+  },
+  "18": {
+    "id": 32,
+    "caption": null,
+    "status": "offen"
+  },
+  "19": {
+    "id": 33,
+    "caption": null,
+    "status": "offen"
+  },
+  "20": {
+    "id": 34,
+    "caption": "Ein neuer Task mit PATCH",
+    "status": "offen"
+  },
+  "21": {
+    "id": 35,
+    "caption": null,
+    "status": "offen"
+  },
+  "22": {
+    "id": 36,
+    "caption": "Ein neuer Task mit PATCH öääöööl",
+    "status": "offen"
+  }
+}

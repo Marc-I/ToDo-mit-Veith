@@ -25,7 +25,7 @@ function execute(){
 
  // Task der json liste hinzufügen (id,caption,status => 'offen')
     // Hole die Liste der Tasks
-    $taskliste = json_decode(file_get_contents('../_unsichtaber_fuer_vito/tasklist.json'), true);
+    $taskliste = json_decode(file_get_contents('../_unsichtaber_fuer_vito/tasklist.json'), true, 512, JSON_UNESCAPED_UNICODE);
 
 
     //neuen Task anhängen
@@ -36,7 +36,7 @@ function execute(){
     );
 
     //Liste speichern
-    file_put_contents('../_unsichtaber_fuer_vito/tasklist.json', json_encode($taskliste));
+    file_put_contents('../_unsichtaber_fuer_vito/tasklist.json', json_encode($taskliste,JSON_UNESCAPED_UNICODE));
 
 
     // Meldung zurückgeben (id, statustext, aktuelle anzahl der tasks)
