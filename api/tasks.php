@@ -12,16 +12,16 @@ switch ($verb) {
     case 'GET':
         include('alle_tasks.php');
         break;
+
     case 'POST':
         include('add_task.php');
         break;
+
     case 'PATCH':
         include('aktualisiere_task.php');
         break;
 
     case 'DELETE':
-
-
         include('loesche_task.php');
         break;
 

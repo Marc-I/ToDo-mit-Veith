@@ -29,18 +29,23 @@ function execute()
     }
 
 
-    // Task den wir bearbeiten wollen holen/laden/abrufen ($task)
+    /**
+     * Task den wir bearbeiten wollen holen/laden/abrufen ($task)
+     */
+
     $taskliste = json_decode(file_get_contents('../_unsichtaber_fuer_vito/tasklist.json'), true);
 
+    // Wir iterieren durch die Taskliste und referenzieren den entsprechenden Task auf die Variable $task
     foreach ($taskliste as &$tmp) {
         if ($tmp['id'] == $taskId) {
             $task = &$tmp;
         }
     }
+
     // eventuelle Fehlermeldung senden (falls der Task nicht existiert) (404)
     if (!isset($task)) {
         http_response_code(404);
-        $message["msg"] = "Task existiert nicht";
+        $message['msg'] = "Task existiert nicht";
         return $message;
     }
 
@@ -48,20 +53,26 @@ function execute()
     if (isset($_PATCH['caption'])) {
         $task['caption'] = strip_tags($_PATCH['caption']);
     }
+
     if (isset($_PATCH['status'])) {
         // Wir erwarten den Status offen oder closed
         if ($_PATCH['status'] == "open") {
-            $task['status'] = 'open';
+            $task['status'] = "open" ;
         }
         if ($_PATCH['status'] == "closed") {
-            $task['status'] = 'closed';
+            $task['status'] = "closed";
         }
 
     }
 
     // Task Speichern
     // eventuellen Fehler senden wenn der Speichervorgang nicht geklappt hat (500)
-    file_put_contents('../_unsichtaber_fuer_vito/tasklist.json', json_encode($taskliste, JSON_UNESCAPED_UNICODE));
+    $save = file_put_contents('../_unsichtaber_fuer_vito/tasklist.json', json_encode($taskliste, JSON_UNESCAPED_UNICODE));
+    if(!$save){
+        http_response_code(500);
+        $message['msg'] = "Task konnte nicht gespeichert werden";
+        return $message;
+    };
 
 
     // Meldung/Antwort senden wenn alles geklappt hat.
@@ -69,6 +80,3 @@ function execute()
     $message['msg'] = "Der Task wurde aktualisert";
     return $message;
 }
-
-
-//$_PATCH = fopen("php://input", "r");
