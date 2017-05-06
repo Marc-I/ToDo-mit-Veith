@@ -17,7 +17,7 @@ function execute()
     if (!isset($_REQUEST['id'])) {
         // => wenn wir keine ID bekommen haben, schmeissen wir einen Fehler, (header 400)
         // und geben eine entsprechende Meldung aus
-        header("HTTP/1.1 400 Bad Request");
+        http_response_code(400);
         $message["msg"] = "Keine ID";
         $message["dev_msg"] = "du hast die ID vergessen";
         return $message;

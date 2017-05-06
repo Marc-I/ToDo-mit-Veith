@@ -20,7 +20,6 @@ switch ($verb) {
         break;
 
     case 'DELETE':
-
         include('loesche_task.php');
         break;
 
