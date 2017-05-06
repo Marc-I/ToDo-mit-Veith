@@ -11,10 +11,11 @@
 
 function execute()
 {
+    // Werte die mit dem Verb DELETE kommen in Variable sichern
+    parse_str(file_get_contents("php://input", "r"),$_DELETE);
 
     // Prüfe ob wir überhaupt eine ID bekommen haben
-
-    if (!isset($_REQUEST['id'])) {
+    if (!isset($_DELETE['id'])) {
         // => wenn wir keine ID bekommen haben, schmeissen wir einen Fehler, (header 400)
         // und geben eine entsprechende Meldung aus
         http_response_code(400);
@@ -22,7 +23,7 @@ function execute()
         $message["dev_msg"] = "du hast die ID vergessen";
         return $message;
     } else {
-        $taskId = $_REQUEST['id'];
+        $taskId = $_DELETE['id'];
     }
 
     // Taskliste laden
